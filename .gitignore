@@ -1,0 +1,4 @@
+.DS_Store
+node_modules/
+# 含 DeepSeek API Key 的本地配置，不提交
+js/config.js
