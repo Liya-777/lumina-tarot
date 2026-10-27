@@ -142,6 +142,7 @@ const I18N = {
     aiLoading:"✨ 正在结合你的问题解读牌面",
     aiFail:"AI 解读失败：{e}<br>已回退为本地模板解读",
     aiRetry:"重新解读",
+    aiQuota:"今日 AI 解读次数已用完（每天 {n} 次），已改用本地模板解读，明天再来吧 ✨",
     overallList:"你抽到了：{list}",
     overallQ:"结合「{q}」来看：",
     overallEnd:"牌面共同指向：<b>{firsts}</b>。整体指引已蕴含其中，请结合现状、忠于直觉，做出属于你的决定。",
@@ -230,6 +231,7 @@ const I18N = {
     aiLoading:"✨ Reading the cards for your question…",
     aiFail:"AI reading failed: {e}<br>Fell back to the local template",
     aiRetry:"Retry",
+    aiQuota:"Daily AI readings used up ({n}/day) — showing the built-in template instead ✨",
     overallList:"You drew: {list}",
     overallQ:"Looking at “{q}”:",
     overallEnd:"The cards point toward <b>{firsts}</b>. Trust your intuition and make the choice that feels right for you.",
@@ -807,6 +809,20 @@ const TAROT_CONFIG = (typeof window !== "undefined" && window.TAROT_CONFIG) || {
 const DEEPSEEK_URL = TAROT_CONFIG.deepseekUrl || "https://api.deepseek.com/chat/completions";
 const DEEPSEEK_MODEL = "deepseek-chat";
 /* Key 优先级：配置文件 js/config.js → 浏览器本地缓存（旧版本手动填写的） */
+/* 每日 AI 解读次数（防滥用）：每个浏览器每天最多 N 次，超出回退本地模板 */
+const AI_QUOTA_KEY = "lumina_ai_quota", AI_QUOTA_MAX = 8;
+function aiQuota(){
+  const today = new Date().toISOString().slice(0, 10);
+  try{
+    const d = JSON.parse(localStorage.getItem(AI_QUOTA_KEY) || "{}");
+    if(d && d.date === today) return { date: today, count: d.count || 0 };
+  }catch(e){}
+  return { date: today, count: 0 };
+}
+function bumpAiQuota(){
+  const q = aiQuota(); q.count += 1;
+  try{ localStorage.setItem(AI_QUOTA_KEY, JSON.stringify(q)); }catch(e){}
+}
 function getApiKey(){
   const cfg = String(TAROT_CONFIG.deepseekKey || "").trim();
   if(cfg) return cfg;
@@ -932,6 +948,13 @@ function renderOverall(){
   const seq = state.readSeq;
   if(state.readAbort){ try{ state.readAbort.abort(); }catch(e){} state.readAbort = null; }
   if(!key){ box.innerHTML = buildOverall(); autoSaveHistory(); return; }
+  const quota = aiQuota();
+  if(quota.count >= AI_QUOTA_MAX){
+    box.innerHTML = buildOverall() + `<p class="ai-quota-tip">${t("aiQuota", { n: AI_QUOTA_MAX })}</p>`;
+    autoSaveHistory();
+    return;
+  }
+  bumpAiQuota();
   autoSaveHistory();
   box.innerHTML = `<div class="overall"><div class="overall-head">${t("overallHeadAI")}</div><div class="overall-body ai-text"><div class="ai-loading">${t("aiLoading")}</div><div class="ai-stream"></div></div><div class="ai-actions" style="display:none"><button class="ai-retry" type="button">${t("aiRetry")}</button></div></div>`;
   const streamBox = box.querySelector(".ai-stream");
