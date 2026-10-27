@@ -998,3 +998,7 @@ html{scrollbar-width:none;-ms-overflow-style:none}
 html::-webkit-scrollbar,body::-webkit-scrollbar{display:none !important;width:0 !important;height:0 !important}
 .view,.lm-box,.thumb-nav,.archive-pane{scrollbar-width:none}
 .view::-webkit-scrollbar,.lm-box::-webkit-scrollbar,.thumb-nav::-webkit-scrollbar,.archive-pane::-webkit-scrollbar{display:none !important;width:0 !important;height:0 !important}
+
+
+/* AI 每日次数用尽提示 */
+.ai-quota-tip{margin:.8rem auto 0;text-align:center;font-size:.78rem;color:var(--c-text-muted);letter-spacing:.03em}
