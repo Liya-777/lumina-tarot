@@ -1,113 +1,115 @@
-# 🔮 琉光塔罗 · LuminaTarot
+# 🔮 LuminaTarot — 琉光塔罗
 
-> 一缕琉光，照见自我 —— 一个纯静态、无需构建的塔罗占卜网站。
+> *A thread of luminous light, reflecting the self.*
 
-[在线预览](https://liya-777.github.io/lumina-tarot/) · [问题反馈](https://github.com/Liya-777/lumina-tarot/issues)
+A fully static, build-free tarot reading site: 78 cards, shuffle & draw, AI reading, a study library, and reading history — all in vanilla HTML/CSS/JavaScript.
 
----
-
-## ✨ 功能特性
-
-### 占卜流程
-- **洗牌**：点击杂乱的牌堆洗牌，可重复点击，停手后自动展开 78 张扇形牌阵
-- **抽牌**：凭直觉点击牌面抽牌，抽齐后逐张翻开，或使用「**一键翻牌**」一次翻完
-- **牌阵**：时间之流（3 张）· 三位一体（3 张）· 得失之间（3 张）· 情感之境（5 张）
-- **今日运势**：无需洗牌，直接抽三张给出当天指引
-
-### 解读
-- **AI 整体解读**：接入 DeepSeek，流式输出、边生成边显示，自动结合「提问者」档案信息
-- **学习者模式**：每张牌的牌意、正逆位关键词、位置含义逐张展示
-- **使用者模式**：跳过逐张细节，直接呈现整体结果，更直观
-
-### 学习与收藏
-- **学习塔罗**：78 张牌全览，点击任意牌查看正逆位牌意（关键词 + 详细解读）
-- **收藏**：点击牌面右上角 ♡ 收藏单张牌；在「收藏的牌」中同样可点击学习牌意
-- **历史**：每次解读后自动记录（最多 10 条），支持回看、单条删除、一键清空
-- **我的档案**：身份选择（学习者 / 使用者）+ 多问卜者信息，自动保存
-
-### 体验细节
-- 🌗 日间 / 夜间双主题，🌸 粉金配色与纸张纹理
-- 🌏 中 / 英文一键切换
-- 🎵 程序化生成的神秘氛围纯音乐（WebAudio 实时合成，无外部音频文件），可调音量 / 静音
-- 📱 全站响应式一屏布局，仅竖向滚动，无横向滚动条，适配 320px 起的各种屏幕
-- 🃏 78 张扇形展开、翻牌 3D 动画、翻牌音效、分享卡生成
+[Live Demo](https://liya-777.github.io/lumina-tarot/) · [Report an Issue](https://github.com/Liya-777/lumina-tarot/issues)
 
 ---
 
-## 🚀 本地运行
+## ✨ Features
 
-项目为纯静态站点，无需安装依赖、无需构建：
+### Reading Flow
+- **Shuffle** — tap the scattered deck to shuffle; tap again to reshuffle; it automatically fans out into 78 cards
+- **Draw** — tap cards by intuition; flip them one by one or use **Flip All**
+- **Spreads** — Time Flow (3), Trinity (3), Gain & Loss (3), Emotional Realm (5)
+- **Daily Fortune** — instant three-card guidance for today, no shuffling
+
+### Interpretation
+- **AI reading** — streams from DeepSeek token by token, weaving in the reader's question and profile
+- **Learner mode** — per-card meanings, upright/reversed keywords and positional context
+- **User mode** — skips card-by-card detail and shows the direct result
+
+### Study & Collection
+- **Study library** — all 78 cards; tap any card for upright/reversed keywords and interpretation
+- **Favorites** — tap the ♡ on a card; saved cards can also be opened for study
+- **History** — every reading is recorded automatically (latest 10), with revisit, single delete and clear-all
+- **Profile** — identity (learner / user) plus multiple seeker profiles, saved locally
+
+### Experience
+- 🌗 Day / night themes with pink-gold palette and paper texture
+- 🌏 Chinese / English switch
+- 🎵 Procedural ambient music (WebAudio synthesis, no audio assets) with volume & mute
+- 📱 Fully responsive one-screen layout: vertical scrolling only, no horizontal scrollbars, from 320px up
+- 🃏 Fan spread, 3D flip animation, flip sound, share-card export
+
+---
+
+## 🚀 Run Locally
+
+No dependencies, no build step:
 
 ```bash
 python3 -m http.server 8899
-# 打开 http://127.0.0.1:8899/
+# open http://127.0.0.1:8899/
 ```
 
-也可以用任意静态服务器（VSCode Live Server、`npx serve` 等）直接托管该目录。
+Any static server works (VS Code Live Server, `npx serve`, …).
 
 ---
 
-## 🤖 AI 解读配置（可选）
+## 🤖 AI Configuration (optional)
 
-不配置时自动使用内置模板解读，配置后启用 DeepSeek AI 流式解读：
+Without a key the app falls back to a built-in template reading. To enable DeepSeek streaming:
 
 ```bash
 cp js/config.example.js js/config.js
 ```
 
-编辑 `js/config.js`：
-
 ```js
 window.TAROT_CONFIG = {
-  deepseekKey: "sk-...",                 // DeepSeek API Key
-  deepseekUrl: ""                        // 可选：自建代理地址，避免前端暴露 Key
+  deepseekKey: "sk-...",   // DeepSeek API key
+  deepseekUrl: ""          // optional: your own proxy endpoint
 };
 ```
 
-> ⚠️ `js/config.js` 已加入 `.gitignore`，不会被提交，密钥不会泄露到公开仓库。
-> 如需公开部署并启用 AI，建议用 `deepseekUrl` 指向自己的小代理（Key 放服务端）。
+> ⚠️ `js/config.js` is listed in `.gitignore` and never committed, so keys stay private.
+> For public deployment, point `deepseekUrl` to a small proxy that keeps the key server-side.
 
 ---
 
-## 🗂 目录结构
+## 🗂 Structure
 
 ```
 .
-├── index.html            # 单页结构：主页 / 开始占卜 / 洗牌抽牌 / 解读 / 学习 / 档案 / 历史
+├── index.html            # single-page views: home / setup / shuffle & pick / reading / study / profile / history
 ├── css/
-│   └── style.css         # 样式：主题、一屏布局、滚动条、动画
+│   └── style.css         # themes, one-screen layout, scrollbar, animations
 ├── js/
-│   ├── app.js            # 全部交互逻辑（洗牌、抽牌、AI 解读、学习、历史、音效）
-│   ├── config.example.js # AI 配置模板（复制为 config.js 使用）
-│   └── data-*.js         # 78 张牌数据（大阿卡纳 + 四花色，含正逆位牌意）
+│   ├── app.js            # all interaction logic (shuffle, draw, AI reading, study, history, audio)
+│   ├── config.example.js # AI config template (copy to config.js)
+│   └── data-*.js         # 78 cards (major arcana + four suits, upright & reversed meanings)
 └── assets/
-    ├── cards/            # 78 张牌面图片
-    └── sfx/              # 翻牌音效
+    ├── cards/            # 78 card images
+    └── sfx/              # flip sound
 ```
 
 ---
 
-## 🛠 技术说明
+## 🛠 Technical Notes
 
-- **零依赖零构建**：原生 HTML / CSS / JavaScript（IIFE），单文件逻辑，双击即可运行
-- **AI 流式输出**：`fetch` + `ReadableStream` 解析 DeepSeek SSE，逐字渲染
-- **程序化音频**：WebAudio 合成低频铺底、小调和弦垫与钟音，配合延迟混响；翻牌音效采样播放
-- **一屏布局**：`100vh` 固定视图 + 内部竖向滚动，滚动条仅在内容溢出时出现
-- **数据持久化**：主题 / 语言 / 身份 / 问卜者档案 / 收藏 / 占卜历史全部存于 `localStorage`
+- **Zero dependencies, zero build** — vanilla HTML/CSS/JS (IIFE), runs by opening the folder
+- **Streaming AI** — `fetch` + `ReadableStream` over DeepSeek SSE, rendered progressively
+- **Procedural audio** — WebAudio drone, minor-chord pads and sparse bells with delay/reverb; sampled flip sound
+- **One-screen layout** — fixed viewport views with internal vertical scrolling; a custom scrollbar appears only when content overflows
+- **Local persistence** — theme, language, identity, profiles, favorites and history in `localStorage`
 
----
-
-## 🌐 部署
-
-推荐 GitHub Pages：
-
-1. 仓库 Settings → Pages → Source 选 **Deploy from a branch**
-2. Branch 选 `main`，目录选 `/ (root)`，Save
-3. 稍等约 1 分钟，访问 `https://<你的用户名>.github.io/lumina-tarot/`
+See [PROJECT-NOTES.md](PROJECT-NOTES.md) for the design and development write-up.
 
 ---
 
-## 📄 说明
+## 🌐 Deployment
 
-- 本站仅供参考与娱乐，不构成任何决策依据。
-- 牌面图片与音效素材仅用于个人学习展示。
+GitHub Pages:
+
+1. Repository → Settings → Pages → Source: **Deploy from a branch**
+2. Branch `main`, folder `/ (root)` → Save
+3. Visit `https://<username>.github.io/lumina-tarot/`
+
+---
+
+## 📄 Notes
+
+- For entertainment and self-reflection only.
+- Card artwork and sound assets are used for personal study and portfolio display.
