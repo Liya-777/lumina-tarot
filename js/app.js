@@ -92,6 +92,7 @@ function showView(id){
   state.view = id;
   document.documentElement.dataset.view = id;
   window.scrollTo({top:0});
+  applyChromeVars();
   setTimeout(updateCustomScrollbar, 30);
 }
 function escapeHtml(s){
@@ -1363,6 +1364,14 @@ function paintMuteIcon(){
 }
 /* ---------- 常驻自定义滚动条 ---------- */
 let csUpdate = null;
+/* 视口尺寸 / header 高度：跨平台（Windows 滚动条、移动端地址栏、字体差异）统一布局基准 */
+function applyChromeVars(){
+  const d = document.documentElement;
+  d.style.setProperty("--vw", d.clientWidth + "px");
+  const h = document.querySelector(".site-header");
+  const ch = h ? Math.ceil(h.getBoundingClientRect().bottom) : 100;
+  d.style.setProperty("--chrome-h", ch + "px");
+}
 function updateCustomScrollbar(){ if(csUpdate) csUpdate(); }
 function initCustomScrollbar(){
   const rail = document.createElement("div");
@@ -2132,6 +2141,9 @@ function init(){
     });
   }
   initSoundPanel();
+  applyChromeVars();
+  window.addEventListener("resize", applyChromeVars);
+  window.addEventListener("orientationchange", ()=> setTimeout(applyChromeVars, 250));
   initCustomScrollbar();
   document.addEventListener("pointerdown", ()=>{ ac(); loadFlipAudio(); setupAmbient(); syncAmbientGain(); }, {once:true});
 }

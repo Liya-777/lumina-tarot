@@ -53,19 +53,16 @@ Any static server works (VS Code Live Server, `npx serve`, …).
 
 Without a key the app falls back to a built-in template reading. To enable DeepSeek streaming:
 
-```bash
-cp js/config.example.js js/config.js
-```
+The repository ships with a working `js/config.js` so that **anyone who opens the deployed site gets an AI reading** without configuring anything.
 
 ```js
 window.TAROT_CONFIG = {
-  deepseekKey: "sk-...",   // DeepSeek API key
+  deepseekKey: "sk-...",   // DeepSeek API key used by the demo
   deepseekUrl: ""          // optional: your own proxy endpoint
 };
 ```
 
-> ⚠️ `js/config.js` is listed in `.gitignore` and never committed, so keys stay private.
-> For public deployment, point `deepseekUrl` to a small proxy that keeps the key server-side.
+> ⚠️ This is a static site: the key is visible in the page source and can be used by anyone who finds it. Set a spending limit on the DeepSeek dashboard, and for heavy public traffic switch to a small server-side proxy (`deepseekUrl`) so the key never leaves your server. Templates for both modes live in `js/config.example.js`.
 
 ---
 

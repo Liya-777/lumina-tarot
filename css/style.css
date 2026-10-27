@@ -6,8 +6,8 @@
   --c-text-main:#8C5A44; --c-text-muted:#B98A72;
   --c-gold:#D8B36B; --c-gold-light:#F7E3A8; --c-gold-deep:#B98B3F;
   --font-serif:'Georgia','Times New Roman','Songti SC','STSong',serif;
-  --font-sans:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;
-  --font-display:'Yuanti SC','YouYuan','PingFang SC','Microsoft YaHei',sans-serif;
+  --font-sans:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei UI','Microsoft YaHei','Segoe UI','Hiragino Sans GB','Noto Sans SC',sans-serif;
+  --font-display:'Yuanti SC','YouYuan','PingFang SC','Microsoft YaHei UI','Microsoft YaHei','Hiragino Sans GB','Noto Sans SC',sans-serif;
   --sp-sm:1rem; --sp-md:1.5rem; --sp-lg:3rem; --sp-xl:5rem;
   --radius-md:14px; --radius-lg:22px;
   --shadow-soft:0 10px 26px -10px rgba(242,136,160,.3);
@@ -696,19 +696,19 @@ html[data-view="start"] .container{padding-bottom:0}
 /* —— 全站响应式一屏：页面不滚动，内容在视图内滚动，页脚隐藏 —— */
 footer{display:none}
 .container{padding-bottom:.75rem}
-.view{max-height:calc(100vh - 100px);overflow-y:auto;overflow-x:hidden;padding-bottom:1.2rem}
-#view-start{max-height:none;min-height:calc(100vh - 100px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.85rem;padding-bottom:0}
+.view{max-height:calc(var(--vh100) - var(--chrome-h));overflow-y:auto;overflow-x:hidden;padding-bottom:1.2rem;min-width:0}
+#view-start{max-height:none;min-height:calc(var(--vh100) - var(--chrome-h));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.85rem;padding-bottom:0}
 #view-start .hero{margin-top:0;margin-bottom:0}
 @media (max-width:480px){
-  .view{max-height:calc(100vh - 140px)}
-  #view-start{min-height:calc(100vh - 140px);gap:.7rem}
+  .view{max-height:calc(var(--vh100) - var(--chrome-h))}
+  #view-start{min-height:calc(var(--vh100) - var(--chrome-h));gap:.7rem}
 }
 @media (max-width:360px){
-  .view{max-height:calc(100vh - 132px)}
-  #view-start{min-height:calc(100vh - 132px)}
+  .view{max-height:calc(var(--vh100) - var(--chrome-h))}
+  #view-start{min-height:calc(var(--vh100) - var(--chrome-h))}
 }
 /* 视图内滚动条稍作美化 */
-#view-shuffle,#view-reading,#view-profile,#view-favs,#view-learn,#view-setup,#view-start{scrollbar-gutter:stable}
+/* scrollbar-gutter 已移除：各平台滚动条由自定义轨道统一处理 */
 
 
 /* 洗牌/扇形舞台在视口内自适应高度，避免撑出页面 */
@@ -757,7 +757,7 @@ html[data-theme="night"] #view-start .profile-entry{background:linear-gradient(1
 .view{
   width:100%;
   margin-left:0;
-  padding-inline:max(calc((100vw - 1072px) / 2), 20px);
+  padding-inline:max(calc((var(--vw) - 1072px) / 2), 20px);
   scrollbar-gutter:auto;
   box-sizing:border-box;
 }
@@ -796,8 +796,8 @@ html[data-theme="night"] .cs-thumb{background:linear-gradient(180deg,var(--c-pin
 
 
 /* —— 开始占卜页：紧凑一屏，返回按钮右置 —— */
-#view-setup{overflow-y:hidden}
-#view-setup.active{display:flex;flex-direction:column;height:calc(100vh - 100px)}
+#view-setup{overflow-y:auto}
+#view-setup.active{display:flex;flex-direction:column;height:calc(var(--vh100) - var(--chrome-h))}
 #view-setup .setup-head{position:relative;text-align:center;margin:clamp(.8rem,1.9vh,1.1rem) 0 clamp(.9rem,2.7vh,1.7rem)}
 #view-setup .setup-head .panel-title{display:inline-block;font-size:1.45rem}
 #view-setup .setup-head .panel-subtitle{display:block;margin-top:.15rem}
@@ -917,17 +917,17 @@ html[data-theme="night"] .r-fav.on{background:linear-gradient(135deg,var(--c-pin
 
 
 /* 抽牌页去掉左右内边距，扇形铺满可视宽度（不超出，避免横向滚动条） */
-#view-shuffle{width:100vw;margin-left:calc(50% - 50vw);padding-inline:0;overflow-x:hidden !important}
+#view-shuffle{width:var(--vw);margin-left:calc(50% - var(--vw)/2);padding-inline:0;overflow-x:hidden !important}
 
 
 /* 首页固定一屏：不出现任何滚动条 */
-#view-start{overflow:hidden !important}
+#view-start{overflow-y:auto !important}
 
 
 /* 兜底：首页/开始占卜页绝不出现任何滚动条（含自定义竖向条） */
 html[data-view="start"] .cs-rail,
 html[data-view="setup"] .cs-rail{display:none !important}
-html[data-view="start"] .view,html[data-view="setup"] .view{overflow:hidden !important}
+html[data-view="start"] .view,html[data-view="setup"] .view{overflow-y:auto !important}
 
 
 /* 扇形牌略缩小：78 张时左右间距更清晰（形状/角度不变） */
@@ -950,14 +950,15 @@ html[data-theme="night"] .btn-flip-all{background:linear-gradient(135deg,var(--c
 
 
 /* —— 抽牌界面一屏：不出现滚动条，一键翻牌/抽好的牌/小字整体上移 —— */
-#view-shuffle.active{display:flex;flex-direction:column;height:calc(100vh - 100px);overflow:hidden !important}
-@media (max-width:480px){ #view-shuffle.active{height:calc(100vh - 140px)} }
-@media (max-width:360px){ #view-shuffle.active{height:calc(100vh - 132px)} }
+#view-shuffle.active{display:flex;flex-direction:column;height:calc(var(--vh100) - var(--chrome-h));overflow:hidden !important}
+@media (max-width:480px){ #view-shuffle.active{height:calc(var(--vh100) - var(--chrome-h))} }
+@media (max-width:360px){ #view-shuffle.active{height:calc(var(--vh100) - var(--chrome-h))} }
 #view-shuffle .stage-head{flex:0 0 auto;margin:.1rem 0 .35rem}
 #view-shuffle .stage-head .panel-title{font-size:1.1rem}
 #view-shuffle .stage-head p{font-size:.8rem}
 #view-shuffle #shuffleHint{flex:0 0 auto;margin:.1rem auto .2rem}
 #view-shuffle .fan-stage{flex:1 1 auto;min-height:0;height:auto !important;margin:.15rem 0 .2rem}
+#view-shuffle .shuffle-stage{flex:1 1 auto;min-height:0;height:auto !important;max-height:none}
 #view-shuffle .btn-flip-all{flex:0 0 auto;margin:.3rem auto .1rem}
 #view-shuffle #pickHint{flex:0 0 auto;margin:.05rem auto .1rem}
 
@@ -986,3 +987,14 @@ html[data-theme="night"] .hist-clear-all{background:rgba(30,18,36,.9);color:#F2A
 .fav-frame{cursor:pointer;transition:transform .18s var(--ease-out-back),box-shadow .18s}
 .fav-frame:hover{transform:translateY(-3px) scale(1.03)}
 .fav-frame:focus-visible{outline:2px solid var(--c-pink);outline-offset:2px;border-radius:12px}
+
+
+/* —— 跨平台适配：视口尺寸变量（JS 动态写入，兼容 Windows 滚动条占位/移动端地址栏） —— */
+:root{--vw:100vw;--vh100:100vh;--chrome-h:100px}
+@supports (height:100dvh){ :root{--vh100:100dvh} }
+
+/* Windows 经典滚动条一律隐藏（站内使用自定义滚动条） */
+html{scrollbar-width:none;-ms-overflow-style:none}
+html::-webkit-scrollbar,body::-webkit-scrollbar{display:none !important;width:0 !important;height:0 !important}
+.view,.lm-box,.thumb-nav,.archive-pane{scrollbar-width:none}
+.view::-webkit-scrollbar,.lm-box::-webkit-scrollbar,.thumb-nav::-webkit-scrollbar,.archive-pane::-webkit-scrollbar{display:none !important;width:0 !important;height:0 !important}
